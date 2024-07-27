@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scientific Calculator</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .calculator {
+            border: 2px solid #333;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            width: 320px;
+        }
+
+        .display {
+            background-color: #222;
+            color: #fff;
+            text-align: right;
+            padding: 20px;
+            font-size: 2.5em;
+            border-bottom: 2px solid #333;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+        }
+
+        .button {
+            padding: 20px;
+            font-size: 1.5em;
+            border: none;
+            background-color: #eee;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .button:hover {
+            background-color:burlywood;
+        }
+
+        .button:active {
+            background-color: #ccc;
+        }
+
+        .button-clear {
+            background-color: #ff6f61;
+            color: #fff;
+        }
+
+        .button-clear:hover {
+            background-color:#337ab7;
+        }
+
+        .button-operator {
+            background-color: #5cb85c;
+            color:white;
+        }
+
+        .button-operator:hover {
+            background-color: #4cae4c;
+        }
+
+        .button-equals {
+            background-color: #337ab7;
+            color:white;
+            grid-column: span 2;
+        }
+
+        .button-equals:hover {
+            background-color: black;
+        }
+
+        .button-zero {
+            grid-column: span 2;
+        }
+
+        .button-zero:hover {
+            background-color:#337ab7;
+        }
+
+        .button-scientific {
+            background-color:powderblue;
+            color: #333;
+        }
+
+        .button-scientific:hover {
+            background-color:plum;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div id="display" class="display">0</div>
+        <div class="buttons">
+            <button class="button button-clear" onclick="clearDisplay()">C</button>
+            <button class="button button-scientific" onclick="toggleSign()">+/-</button>
+            <button class="button button-scientific" onclick="appendToDisplay('%')">%</button>
+            <button class="button button-scientific" onclick="applySquareRoot()">√</button>
+            <button class="button button-scientific" onclick="appendToDisplay('/')">/</button>
+            <button class="button" onclick="appendToDisplay('7')">7</button>
+            <button class="button" onclick="appendToDisplay('8')">8</button>
+            <button class="button" onclick="appendToDisplay('9')">9</button>
+            <button class="button button-operator" onclick="appendToDisplay('*')">*</button>
+            <button class="button" onclick="appendToDisplay('4')">4</button>
+            <button class="button" onclick="appendToDisplay('5')">5</button>
+            <button class="button" onclick="appendToDisplay('6')">6</button>
+            <button class="button button-operator" onclick="appendToDisplay('-')">-</button>
+            <button class="button" onclick="appendToDisplay('1')">1</button>
+            <button class="button" onclick="appendToDisplay('2')">2</button>
+            <button class="button" onclick="appendToDisplay('3')">3</button>
+            <button class="button button-operator" onclick="appendToDisplay('+')">+</button>
+            <button class="button button-zero" onclick="appendToDisplay('0')">0</button>
+            <button class="button" onclick="appendToDisplay('.')">.</button>
+            <button class="button button-equals" onclick="calculateResult()">=</button>
+        </div>
+    </div>
+    <script>
+        let displayValue = '0';
+
+        function updateDisplay() {
+            const display = document.getElementById('display');
+            display.textContent = displayValue;
+        }
+
+        function clearDisplay() {
+            displayValue = '0';
+            updateDisplay();
+        }
+
+        function appendToDisplay(value) {
+            if (displayValue === '0') {
+                displayValue = value;
+            } else {
+                displayValue += value;
+            }
+            updateDisplay();
+        }
+
+        function calculateResult() {
+            try {
+                displayValue = eval(displayValue);
+                updateDisplay();
+            } catch (e) {
+                displayValue = 'Error';
+                updateDisplay();
+            }
+        }
+
+        function toggleSign() {
+            if (displayValue.charAt(0) === '-') {
+                displayValue = displayValue.slice(1);
+            } else {
+                displayValue = '-' + displayValue;
+            }
+            updateDisplay();
+        }
+
+        function applySquareRoot() {
+            try {
+                displayValue = Math.sqrt(parseFloat(displayValue));
+                updateDisplay();
+            } catch (e) {
+                displayValue = 'Error';
+                updateDisplay();
+            }
+        }
+
+        document.addEventListener('keydown', function(event) {
+            const key = event.key;
+            if ((key >= 0 && key <= 9) || key === '.') {
+                appendToDisplay(key);
+            } else if (key === '+' || key === '-' || key === '*' || key === '/') {
+                appendToDisplay(key);
+            } else if (key === 'Enter' || key === '=') {
+                calculateResult();
+            } else if (key === 'Escape') {
+                clearDisplay();
+            }
+        });
+    </script>
+</body>
+</html>
